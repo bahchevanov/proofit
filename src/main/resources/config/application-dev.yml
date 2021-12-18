@@ -1,0 +1,26 @@
+logging:
+  level:
+    ROOT: DEBUG
+    org.hibernate.SQL: DEBUG
+    lv.proofit.policy: DEBUG
+
+spring:
+  jackson:
+    serialization:
+      indent-output: true
+  messages:
+    cache-duration: PT1S # 1 second, see the ISO 8601 standard
+  thymeleaf:
+    cache: false
+
+server:
+  port: 8080
+
+application:
+  cors:
+    allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000'
+    allowed-methods: '*'
+    allowed-headers: '*'
+    exposed-headers: 'Authorization'
+    allow-credentials: true
+    max-age: 1800
