@@ -26,7 +26,6 @@ public class ProofItApp {
         this.env = env;
     }
 
-
     /**
      * Main method, used to run the application.
      *
