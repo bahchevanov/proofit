@@ -62,7 +62,8 @@ public class PolicySubObject implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PolicySubObject that = (PolicySubObject) o;
-        return name.equals(that.name) && riskType.equals(that.riskType);
+        return name != null && riskType != null
+            && Objects.equals(name, that.name) && Objects.equals(riskType, that.riskType);
     }
 
     @Override

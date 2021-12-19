@@ -54,7 +54,7 @@ public class Policy implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Policy policy = (Policy) o;
-        return number.equals(policy.number);
+        return number !=null && Objects.equals(number, policy.number);
     }
 
     @Override
