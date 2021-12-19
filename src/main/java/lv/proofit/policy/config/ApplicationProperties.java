@@ -13,8 +13,13 @@ public class ApplicationProperties {
 
     private final CorsConfiguration cors = new CorsConfiguration();
 
+    private final RiskProperties riskProperties = new RiskProperties();
+
     public CorsConfiguration getCors() {
         return this.cors;
     }
 
+    public RiskProperties getRiskProperties() {
+        return riskProperties;
+    }
 }

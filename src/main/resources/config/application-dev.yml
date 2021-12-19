@@ -17,6 +17,41 @@ server:
   port: 8080
 
 application:
+  #===========================================#
+  # risk specific properties #
+  #===========================================#
+  risk-properties:
+    #===========================================#
+    # how to round the premium amount           #
+    #===========================================#
+    premiumScale: 2
+    #===========================================#
+    # default risk             #
+    #===========================================#
+    default-risk:
+      risk-type: OTHER
+      default-coefficient: 0.11
+      threshold-amount: 15
+      threshold-coefficient: 0.05
+      threshold-comparison: EGT
+    risks:
+      #===========================================#
+      # type specific risks properties            #
+      # add here additional risk implementations  #
+      #===========================================#
+      FIRE:
+        risk-type: FIRE
+        default-coefficient: 0.014
+        threshold-amount: 100
+        threshold-coefficient: 0.024
+        threshold-comparison: GT
+      THEFT:
+        risk-type: THEFT
+        default-coefficient: 0.11
+        threshold-amount: 15
+        threshold-coefficient: 0.05
+        threshold-comparison: EGT
+
   cors:
     allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000'
     allowed-methods: '*'
