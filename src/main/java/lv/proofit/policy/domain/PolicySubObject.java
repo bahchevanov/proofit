@@ -1,7 +1,6 @@
 package lv.proofit.policy.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lv.proofit.policy.domain.enumeration.RiskType;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -21,7 +20,7 @@ public class PolicySubObject implements Serializable {
     private Double insuranceSum;
 
     @NotNull
-    private RiskType riskType;
+    private String riskType;
 
     @JsonIgnoreProperties(value = {"policySubObjects", "policy"}, allowSetters = true)
     private PolicyObject policyObject;
@@ -42,11 +41,11 @@ public class PolicySubObject implements Serializable {
         this.insuranceSum = insuranceSum;
     }
 
-    public RiskType getRiskType() {
+    public String getRiskType() {
         return riskType;
     }
 
-    public void setRiskType(RiskType riskType) {
+    public void setRiskType(String riskType) {
         this.riskType = riskType;
     }
 
@@ -63,7 +62,7 @@ public class PolicySubObject implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PolicySubObject that = (PolicySubObject) o;
-        return name.equals(that.name) && riskType == that.riskType;
+        return name.equals(that.name) && riskType.equals(that.riskType);
     }
 
     @Override
