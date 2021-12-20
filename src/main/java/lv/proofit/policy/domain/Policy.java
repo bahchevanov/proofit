@@ -3,6 +3,8 @@ package lv.proofit.policy.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lv.proofit.policy.domain.enumeration.PolicyStatus;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -22,6 +24,8 @@ public class Policy implements Serializable {
     @NotNull
     private PolicyStatus status;
 
+    @Valid
+    @NotEmpty
     @JsonIgnoreProperties(value = {"policySubObjects", "policy"}, allowSetters = true)
     private Set<PolicyObject> policyObjects = new HashSet<>();
 
