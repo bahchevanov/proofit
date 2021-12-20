@@ -31,10 +31,12 @@ spring:
 server:
   port: 10344
   address: localhost
+  error:
+    include-stacktrace: never
 
 application:
   #===========================================#
-  # risk specific properties #
+  # risk specific properties                  #
   #===========================================#
   risk-properties:
     #===========================================#
@@ -42,7 +44,7 @@ application:
     #===========================================#
     premiumScale: 2
     #===========================================#
-    # default risk             #
+    # default risk                              #
     #===========================================#
     default-risk:
       risk-type: OTHER
