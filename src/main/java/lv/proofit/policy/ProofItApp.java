@@ -14,7 +14,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Optional;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {
+    org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,
+    org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration.class}
+)
 @EnableConfigurationProperties({ApplicationProperties.class})
 public class ProofItApp {
 
