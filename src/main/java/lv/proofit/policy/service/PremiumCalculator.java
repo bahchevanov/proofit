@@ -8,7 +8,11 @@ import lv.proofit.policy.domain.PolicySubObject;
 import lv.proofit.policy.domain.Risk;
 import lv.proofit.policy.domain.enumeration.ThresholdComparison;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Map;
@@ -20,6 +24,7 @@ import java.util.stream.Collectors;
  * Calculates premium of a policy
  */
 @Service
+@Validated
 public class PremiumCalculator {
 
     private final RiskProperties riskProperties;
@@ -34,9 +39,9 @@ public class PremiumCalculator {
      * @param policy The policy to calculate its premium
      * @return the calculated premium
      */
-    public Double calculate(Policy policy) {
+    public Double calculate(@Valid @NotNull Policy policy) {
 
-        // sums the sub-object insured sums by the risk type
+        //  groups per risk type and total sum insured of sub-objects
         Map<String, Double> sumPerRiskType = policy.getPolicyObjects()
             .stream()
             .map(PolicyObject::getPolicySubObjects)
@@ -44,6 +49,13 @@ public class PremiumCalculator {
             .collect(Collectors.groupingBy(PolicySubObject::getRiskType,
                 Collectors.summingDouble(PolicySubObject::getInsuranceSum)));
 
+        //sums the sub-premiums for every type
+        Double premium = calculate(sumPerRiskType);
+
+        return premium;
+    }
+
+    private Double calculate(@NotEmpty Map<String, Double> sumPerRiskType) {
         //sums the sub-premiums for every type
         Double premium = sumPerRiskType.entrySet()
             .stream()
