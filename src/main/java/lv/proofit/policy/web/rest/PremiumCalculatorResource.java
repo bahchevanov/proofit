@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 
 /**
  * REST controller for premium calculation of a {@link lv.proofit.policy.domain.Policy}.
@@ -40,7 +39,7 @@ public class PremiumCalculatorResource {
         try {
             Double premium = calculator.calculate(policy);
             return ResponseEntity.ok(premium);
-        } catch (ValidationException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }

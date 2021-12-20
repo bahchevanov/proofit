@@ -7,6 +7,7 @@ import lv.proofit.policy.domain.PolicyObject;
 import lv.proofit.policy.domain.PolicySubObject;
 import lv.proofit.policy.domain.Risk;
 import lv.proofit.policy.domain.enumeration.ThresholdComparison;
+import lv.proofit.policy.service.error.PolicyNotValidException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -39,7 +40,7 @@ public class PremiumCalculator {
      * @param policy The policy to calculate its premium
      * @return the calculated premium
      */
-    public Double calculate(@Valid @NotNull Policy policy) {
+    public Double calculate(@Valid @NotNull Policy policy) throws PolicyNotValidException {
 
         //  groups per risk type and total sum insured of sub-objects
         Map<String, Double> sumPerRiskType = policy.getPolicyObjects()
@@ -55,12 +56,14 @@ public class PremiumCalculator {
         return premium;
     }
 
-    private Double calculate(@NotEmpty Map<String, Double> sumPerRiskType) {
+    private Double calculate(@NotEmpty Map<String, Double> sumPerRiskType) throws PolicyNotValidException {
         //sums the sub-premiums for every type
-        Double premium = sumPerRiskType.entrySet()
-            .stream()
-            .mapToDouble(entry -> this.calculateByRisk(entry.getKey(), entry.getValue()))
-            .sum();
+
+        Double premium = 0.;
+        for (Map.Entry<String, Double> entry : sumPerRiskType.entrySet()) {
+            double subPremium = calculateByRisk(entry.getKey(), entry.getValue());
+            premium = Double.sum(premium, subPremium);
+        }
 
         return premium;
     }
@@ -73,7 +76,11 @@ public class PremiumCalculator {
      * @param sumInsured sub-object insurance sum
      * @return the calculated sub-premium
      */
-    public double calculateByRisk(String riskType, Double sumInsured) {
+    public double calculateByRisk(String riskType, Double sumInsured) throws PolicyNotValidException {
+
+        if (sumInsured == null || Double.compare(sumInsured, 0.0) < 0) {
+            throw new PolicyNotValidException("SubObjects total sum insured is negative for risk type: " + riskType);
+        }
         Risk risk = resolveRisk(riskType);
         // gets the applied coefficient
         double coefficient = resolveCoefficient(sumInsured, risk);
