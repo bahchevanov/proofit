@@ -84,12 +84,10 @@ public class PremiumCalculatorTest {
     }
 
     private void testCalculateFireRisk() throws PolicyNotValidException {
-        double sunInsured = 0;
-        double premium = calculator.calculateByRisk(FIRE_TYPE, sunInsured);
-        assertThat(premium).isEqualTo(0);
 
-        sunInsured = Double.MAX_VALUE;
-        premium = calculator.calculateByRisk(FIRE_TYPE, sunInsured);
+
+        double sunInsured = Double.MAX_VALUE;
+        double premium = calculator.calculateByRisk(FIRE_TYPE, sunInsured);
         assertThat(premium).isNotEqualTo(0.);
 
         sunInsured = 100;
@@ -102,20 +100,23 @@ public class PremiumCalculatorTest {
         assertThat(premium).isNotNull();
         assertThat(premium).isEqualTo(12);
 
-        String err = "SubObjects total sum insured is negative for risk type: " + FIRE_TYPE;
+        String err = "SubObjects total sum insured is negative or zero for risk type: " + FIRE_TYPE;
         PolicyNotValidException thrown = Assertions.assertThrows(PolicyNotValidException.class, () -> {
+            calculator.calculateByRisk(FIRE_TYPE, 0.);
+        }, err);
+        Assertions.assertEquals(err, thrown.getMessage());
+
+        err = "SubObjects total sum insured is negative or zero for risk type: " + FIRE_TYPE;
+        thrown = Assertions.assertThrows(PolicyNotValidException.class, () -> {
             calculator.calculateByRisk(FIRE_TYPE, -100.);
         }, err);
         Assertions.assertEquals(err, thrown.getMessage());
     }
 
     private void testCalculateTheftRisk() throws PolicyNotValidException {
-        double sunInsured = 0;
-        double premium = calculator.calculateByRisk(THEFT_TYPE, sunInsured);
-        assertThat(premium).isEqualTo(0);
 
-        sunInsured = Double.MAX_VALUE;
-        premium = calculator.calculateByRisk(THEFT_TYPE, sunInsured);
+        double sunInsured = Double.MAX_VALUE;
+        double premium = calculator.calculateByRisk(THEFT_TYPE, sunInsured);
         assertThat(premium).isNotEqualTo(0.);
 
         sunInsured = 8;
@@ -128,8 +129,14 @@ public class PremiumCalculatorTest {
         assertThat(premium).isNotNull();
         assertThat(premium).isEqualTo(5.13);
 
-        String err = "SubObjects total sum insured is negative for risk type: " + THEFT_TYPE;
+        String err = "SubObjects total sum insured is negative or zero for risk type: " + THEFT_TYPE;
         PolicyNotValidException thrown = Assertions.assertThrows(PolicyNotValidException.class, () -> {
+            calculator.calculateByRisk(THEFT_TYPE, 0.);
+        }, err);
+        Assertions.assertEquals(err, thrown.getMessage());
+
+        err = "SubObjects total sum insured is negative or zero for risk type: " + THEFT_TYPE;
+        thrown = Assertions.assertThrows(PolicyNotValidException.class, () -> {
             calculator.calculateByRisk(THEFT_TYPE, -100.);
         }, err);
         Assertions.assertEquals(err, thrown.getMessage());

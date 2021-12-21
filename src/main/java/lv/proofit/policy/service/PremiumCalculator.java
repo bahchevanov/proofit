@@ -56,7 +56,7 @@ public class PremiumCalculator {
         return premium;
     }
 
-    private Double calculate(@NotEmpty Map<String, Double> sumPerRiskType) throws PolicyNotValidException {
+    protected Double calculate(@NotEmpty Map<String, Double> sumPerRiskType) throws PolicyNotValidException {
         //sums the sub-premiums for every type
 
         Double premium = 0.;
@@ -76,10 +76,10 @@ public class PremiumCalculator {
      * @param sumInsured sub-object insurance sum
      * @return the calculated sub-premium
      */
-    public double calculateByRisk(String riskType, Double sumInsured) throws PolicyNotValidException {
+    protected double calculateByRisk(String riskType, Double sumInsured) throws PolicyNotValidException {
 
-        if (sumInsured == null || Double.compare(sumInsured, 0.0) < 0) {
-            throw new PolicyNotValidException("SubObjects total sum insured is negative for risk type: " + riskType);
+        if (sumInsured == null || Double.compare(sumInsured, 0.0) <= 0) {
+            throw new PolicyNotValidException("SubObjects total sum insured is negative or zero for risk type: " + riskType);
         }
         Risk risk = resolveRisk(riskType);
         // gets the applied coefficient
