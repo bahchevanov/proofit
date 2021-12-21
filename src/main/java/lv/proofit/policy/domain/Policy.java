@@ -1,6 +1,5 @@
 package lv.proofit.policy.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lv.proofit.policy.domain.enumeration.PolicyStatus;
 
 import javax.validation.Valid;
@@ -26,7 +25,6 @@ public class Policy implements Serializable {
 
     @Valid
     @NotEmpty
-    @JsonIgnoreProperties(value = {"policySubObjects", "policy"}, allowSetters = true)
     private Set<PolicyObject> policyObjects = new HashSet<>();
 
     public String getNumber() {
@@ -64,5 +62,20 @@ public class Policy implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(number);
+    }
+
+    public Policy withNumber(String number) {
+        this.number = number;
+        return this;
+    }
+
+    public Policy withStatus(PolicyStatus status) {
+        this.status = status;
+        return this;
+    }
+
+    public Policy withPolicyObjects(Set<PolicyObject> policyObjects) {
+        this.policyObjects = policyObjects;
+        return this;
     }
 }

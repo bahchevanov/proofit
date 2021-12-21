@@ -1,7 +1,5 @@
 package lv.proofit.policy.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -22,11 +20,7 @@ public class PolicyObject implements Serializable {
 
     @Valid
     @NotEmpty
-    @JsonIgnoreProperties(value = {"policyObject"}, allowSetters = true)
     private Set<PolicySubObject> policySubObjects = new HashSet<>();
-
-    @JsonIgnoreProperties(value = {"policyObjects"}, allowSetters = true)
-    private Policy policy;
 
     public String getName() {
         return name;
@@ -44,14 +38,6 @@ public class PolicyObject implements Serializable {
         this.policySubObjects = policySubObjects;
     }
 
-    public Policy getPolicy() {
-        return policy;
-    }
-
-    public void setPolicy(Policy policy) {
-        this.policy = policy;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,5 +49,15 @@ public class PolicyObject implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    public PolicyObject withName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public PolicyObject withPolicySubObjects(Set<PolicySubObject> policySubObjects) {
+        this.policySubObjects = policySubObjects;
+        return this;
     }
 }
