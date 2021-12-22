@@ -1,0 +1,38 @@
+{
+	"info": {
+		"_postman_id": "c3df413d-afd7-4747-96f8-4a95db209caf",
+		"name": "premium calculator",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/api/calculate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"number\": \"policynumber\",\n    \"status\": \"REGISTERED\",\n    \"policyObjects\": [\n        {\n            \"name\": \"object name\",\n            \"policySubObjects\": [\n                {\n                    \"name\": \"sub-object-1\",\n                    \"insuranceSum\": 100.0,\n                    \"riskType\": \"FIRE\"\n                },\n                {\n                    \"name\": \"sub-object-1\",\n                    \"insuranceSum\": 8.0,\n                    \"riskType\": \"THEFT\"\n                }\n            ]\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/calculate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"calculate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

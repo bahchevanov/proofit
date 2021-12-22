@@ -1,6 +1,7 @@
 package lv.proofit.policy.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -31,7 +32,10 @@ public final class TestUtil {
         mapper.registerModule(new JavaTimeModule());
         return mapper;
     }
-
+public static String tojson(Policy policy) throws JsonProcessingException {
+    String s = mapper.writeValueAsString(policy);
+    return s;
+}
     /**
      * Verifies the equals/hashcode contract on the domain object.
      */

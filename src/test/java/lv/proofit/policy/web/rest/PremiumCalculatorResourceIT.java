@@ -1,5 +1,6 @@
 package lv.proofit.policy.web.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lv.proofit.policy.ProofItApp;
 import lv.proofit.policy.domain.Policy;
 import lv.proofit.policy.domain.TestUtil;
@@ -45,9 +46,10 @@ class PremiumCalculatorResourceIT {
 
 
     @BeforeEach
-    public void initTest() {
+    public void initTest() throws JsonProcessingException {
         policy1 = TestUtil.createEntity(100, 8);
         policy2 = TestUtil.createEntity(500, 102.51);
+        System.out.println( TestUtil.tojson(policy1));
     }
 
     @Test
