@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lv.proofit.policy.domain.enumeration.PolicyStatus;
 
 import java.io.IOException;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,6 +15,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Utility class for testing objects
  */
 public final class TestUtil {
+
+    private static final String DEFAULT_NUMBER = "AAAAAAAAAA";
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String RISK_TYPE_FIRE = "FIRE";
+    private static final String RISK_TYPE_THEFT = "THEFT";
+    private static final PolicyStatus DEFAULT_STATUS = PolicyStatus.REGISTERED;
 
     private static final ObjectMapper mapper = createObjectMapper();
 
@@ -52,5 +60,24 @@ public final class TestUtil {
      */
     public static byte[] convertObjectToJsonBytes(Object object) throws IOException {
         return mapper.writeValueAsBytes(object);
+    }
+
+    public static Policy createEntity(double sum1, double sum2) {
+        Policy policy = new Policy().withNumber(DEFAULT_NUMBER).withStatus(DEFAULT_STATUS);
+        PolicyObject policyObject = new PolicyObject().withName(DEFAULT_NAME);
+
+        Set<PolicySubObject> policySubObjects = Set.of(new PolicySubObject()
+                .withName(DEFAULT_NAME)
+                .withInsuranceSum(sum1)
+                .withRiskType(RISK_TYPE_FIRE),
+            new PolicySubObject()
+                .withName(DEFAULT_NAME)
+                .withInsuranceSum(sum2)
+                .withRiskType(RISK_TYPE_THEFT));
+
+        policyObject.withPolicySubObjects(policySubObjects);
+        policy.withPolicyObjects(Set.of(policyObject));
+
+        return policy;
     }
 }

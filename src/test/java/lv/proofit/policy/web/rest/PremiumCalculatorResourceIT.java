@@ -2,8 +2,6 @@ package lv.proofit.policy.web.rest;
 
 import lv.proofit.policy.ProofItApp;
 import lv.proofit.policy.domain.Policy;
-import lv.proofit.policy.domain.PolicyObject;
-import lv.proofit.policy.domain.PolicySubObject;
 import lv.proofit.policy.domain.TestUtil;
 import lv.proofit.policy.domain.enumeration.PolicyStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -46,40 +42,12 @@ class PremiumCalculatorResourceIT {
 
     private Policy policy1;
     private Policy policy2;
-    private Policy policy3;
-
-    /**
-     * Create an entity for this test.
-     * <p>
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static Policy createEntity(double sum1, double sum2) {
-        Policy policy = new Policy().withNumber(DEFAULT_NUMBER).withStatus(DEFAULT_STATUS);
-        PolicyObject policyObject = new PolicyObject().withName(DEFAULT_NAME);
-
-        Set<PolicySubObject> policySubObjects = Set.of(new PolicySubObject()
-                .withName(DEFAULT_NAME)
-                .withInsuranceSum(sum1)
-                .withRiskType(RISK_TYPE_FIRE),
-            new PolicySubObject()
-                .withName(DEFAULT_NAME)
-                .withInsuranceSum(sum2)
-                .withRiskType(RISK_TYPE_THEFT));
-
-        policyObject.withPolicySubObjects(policySubObjects);
-        policy.withPolicyObjects(Set.of(policyObject));
-
-        return policy;
-    }
-
-
 
 
     @BeforeEach
     public void initTest() {
-        policy1 = createEntity(100, 8);
-        policy2 = createEntity(500, 102.51);
+        policy1 = TestUtil.createEntity(100, 8);
+        policy2 = TestUtil.createEntity(500, 102.51);
     }
 
     @Test
@@ -102,7 +70,7 @@ class PremiumCalculatorResourceIT {
 
     @Test
     void testPolicyIsNull() throws Exception {
-        policy1=null;
+        policy1 = null;
         restPolicyMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(policy1)))
@@ -163,28 +131,28 @@ class PremiumCalculatorResourceIT {
 
     @Test
     void testAnySumInsuredMustBeBiggerThanZero() throws Exception {
-        policy1 = createEntity(1,-1);
+        policy1 = TestUtil.createEntity(1, -1);
 
         restPolicyMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(policy1)))
             .andExpect(status().isBadRequest());
 
-        policy1 = createEntity(-1,1);
+        policy1 = TestUtil.createEntity(-1, 1);
 
         restPolicyMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(policy1)))
             .andExpect(status().isBadRequest());
 
-        policy1 = createEntity(1,-0);
+        policy1 = TestUtil.createEntity(1, -0);
 
         restPolicyMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(policy1)))
             .andExpect(status().isBadRequest());
 
-        policy1 = createEntity(-0,1);
+        policy1 = TestUtil.createEntity(-0, 1);
 
         restPolicyMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON)

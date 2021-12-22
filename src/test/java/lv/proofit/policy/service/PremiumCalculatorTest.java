@@ -2,7 +2,9 @@ package lv.proofit.policy.service;
 
 import lv.proofit.policy.ProofItApp;
 import lv.proofit.policy.config.ApplicationProperties;
+import lv.proofit.policy.domain.Policy;
 import lv.proofit.policy.domain.Risk;
+import lv.proofit.policy.domain.TestUtil;
 import lv.proofit.policy.domain.enumeration.ThresholdComparison;
 import lv.proofit.policy.service.error.PolicyNotValidException;
 import org.junit.jupiter.api.Assertions;
@@ -138,6 +140,31 @@ public class PremiumCalculatorTest {
         err = "SubObjects total sum insured is negative or zero for risk type: " + THEFT_TYPE;
         thrown = Assertions.assertThrows(PolicyNotValidException.class, () -> {
             calculator.calculateByRisk(THEFT_TYPE, -100.);
+        }, err);
+        Assertions.assertEquals(err, thrown.getMessage());
+    }
+
+    @Test
+    public void testCalculate() throws PolicyNotValidException {
+        testCalculateThrows(1,-1,THEFT_TYPE);
+        testCalculateThrows(-1,1,FIRE_TYPE);
+
+        testCalculate(100,8,2.28);
+        testCalculate(500,102.51,17.13);
+    }
+
+    private void testCalculate(double sum1, double sum2, double expected) throws PolicyNotValidException {
+        Policy policy = TestUtil.createEntity(sum1, sum2);
+        Double premium = calculator.calculate(policy);
+        Assertions.assertEquals(expected, premium);
+    }
+
+    private void testCalculateThrows(double sum1, double sum2, String riskType){
+        Policy policy = TestUtil.createEntity(sum1, sum2);
+
+        String err = "SubObjects total sum insured is negative or zero for risk type: " + riskType;
+        PolicyNotValidException thrown = Assertions.assertThrows(PolicyNotValidException.class, () -> {
+            calculator.calculate(policy);
         }, err);
         Assertions.assertEquals(err, thrown.getMessage());
     }
